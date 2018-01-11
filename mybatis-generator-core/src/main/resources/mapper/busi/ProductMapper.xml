@@ -1,0 +1,355 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.busi.ProductMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.busi.Product">
+    <id column="prod_id" jdbcType="BIGINT" property="prodId" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="prod_name" jdbcType="VARCHAR" property="prodName" />
+    <result column="prod_code" jdbcType="VARCHAR" property="prodCode" />
+    <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+    <result column="cata_id" jdbcType="INTEGER" property="cataId" />
+    <result column="cata_name" jdbcType="VARCHAR" property="cataName" />
+    <result column="brand_id" jdbcType="INTEGER" property="brandId" />
+    <result column="brand_name" jdbcType="VARCHAR" property="brandName" />
+    <result column="model" jdbcType="VARCHAR" property="model" />
+    <result column="spec" jdbcType="VARCHAR" property="spec" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="level" jdbcType="VARCHAR" property="level" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="price" jdbcType="REAL" property="price" />
+    <result column="stock" jdbcType="INTEGER" property="stock" />
+    <result column="minsale" jdbcType="INTEGER" property="minsale" />
+    <result column="pick_addr" jdbcType="VARCHAR" property="pickAddr" />
+    <result column="exhb_addr" jdbcType="VARCHAR" property="exhbAddr" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="check_status" jdbcType="TINYINT" property="checkStatus" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="sales_price" jdbcType="REAL" property="salesPrice" />
+    <result column="album" jdbcType="VARCHAR" property="album" />
+    <result column="fresh" jdbcType="TINYINT" property="fresh" />
+    <result column="sale_type" jdbcType="TINYINT" property="saleType" />
+    <result column="valid_dates" jdbcType="INTEGER" property="validDates" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="descp" jdbcType="VARCHAR" property="descp" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+    <result column="updates" jdbcType="VARCHAR" property="updates" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="prodId != null">
+       and prod_id = #{prodId,jdbcType=BIGINT}
+    </if>
+    <if test="uid != null">
+       and uid = #{uid,jdbcType=INTEGER}
+    </if>
+    <if test="nickName != null">
+       <![CDATA[and nick_name like CONCAT('%',#{nickName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="prodName != null">
+       <![CDATA[and prod_name like CONCAT('%',#{prodName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="prodCode != null">
+       <![CDATA[and prod_code like CONCAT('%',#{prodCode,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="keyWords != null">
+       <![CDATA[and key_words like CONCAT('%',#{keyWords,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="cataId != null">
+       and cata_id = #{cataId,jdbcType=INTEGER}
+    </if>
+    <if test="cataName != null">
+       <![CDATA[and cata_name like CONCAT('%',#{cataName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="brandId != null">
+       and brand_id = #{brandId,jdbcType=INTEGER}
+    </if>
+    <if test="brandName != null">
+       <![CDATA[and brand_name like CONCAT('%',#{brandName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="model != null">
+       <![CDATA[and model like CONCAT('%',#{model,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="spec != null">
+       <![CDATA[and spec like CONCAT('%',#{spec,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="origin != null">
+       <![CDATA[and origin like CONCAT('%',#{origin,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="level != null">
+       <![CDATA[and level like CONCAT('%',#{level,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="unit != null">
+       <![CDATA[and unit like CONCAT('%',#{unit,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="price != null">
+       and price = #{price,jdbcType=REAL}
+    </if>
+    <if test="stock != null">
+       and stock = #{stock,jdbcType=INTEGER}
+    </if>
+    <if test="minsale != null">
+       and minsale = #{minsale,jdbcType=INTEGER}
+    </if>
+    <if test="pickAddr != null">
+       <![CDATA[and pick_addr like CONCAT('%',#{pickAddr,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="exhbAddr != null">
+       <![CDATA[and exhb_addr like CONCAT('%',#{exhbAddr,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="checkStatus != null">
+       and check_status = #{checkStatus,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="salesPrice != null">
+       and sales_price = #{salesPrice,jdbcType=REAL}
+    </if>
+    <if test="album != null">
+       <![CDATA[and album like CONCAT('%',#{album,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="fresh != null">
+       and fresh = #{fresh,jdbcType=TINYINT}
+    </if>
+    <if test="saleType != null">
+       and sale_type = #{saleType,jdbcType=TINYINT}
+    </if>
+    <if test="validDates != null">
+       and valid_dates = #{validDates,jdbcType=INTEGER}
+    </if>
+    <if test="brief != null">
+       <![CDATA[and brief like CONCAT('%',#{brief,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="descp != null">
+       <![CDATA[and descp like CONCAT('%',#{descp,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="lastUpdateStart != null and lastUpdateEnd != null">
+       and last_update &gt;= #{lastUpdateStart,jdbcType=TIMESTAMP} and #{lastUpdateEnd,jdbcType=TIMESTAMP} &gt;= last_update
+    </if>
+    <if test="updates != null">
+       <![CDATA[and updates like CONCAT('%',#{updates,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    prod_id, uid, nick_name, prod_name, prod_code, key_words, cata_id, cata_name, brand_id, 
+    brand_name, model, spec, origin, level, unit, price, stock, minsale, pick_addr, exhb_addr, 
+    create_time, status, check_status, status_time, sales_price, album, fresh, sale_type, 
+    valid_dates, brief, descp, last_update, updates
+  </sql>
+  <select id="selectMaxProductId" resultType="java.lang.Long">
+    select IFNULL(max(prod_id), 0) from product
+  </select>
+  <select id="getProductByKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from product
+    where prod_id = #{prodId,jdbcType=BIGINT}
+  </select>
+  <select id="selectProducts" parameterType="com.cera.chain.entity.busi.Product" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from product where 1=1 
+    <include refid="select_where_sql" />
+    <if test="orderBy != null and orderBy != '' ">
+      #{orderBy} 
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectProductByPage" parameterType="com.cera.chain.entity.busi.Product" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from product where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="orderBy != null and orderBy != '' ">
+      #{orderBy} 
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalProduct" parameterType="com.cera.chain.entity.busi.Product" resultType="java.lang.Long">
+    select count(*) as `count`
+     from product where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteProductByKey" parameterType="java.lang.Long">
+    delete from product
+    where prod_id = #{prodId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteProductByList" parameterType="java.lang.Long">
+    delete from product
+    where prod_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.prodId}
+	 </foreach>
+  </delete>
+  <insert id="addProduct" parameterType="com.cera.chain.entity.busi.Product">
+    insert into product (prod_id, uid, nick_name, 
+      prod_name, prod_code, key_words, 
+      cata_id, cata_name, brand_id, 
+      brand_name, model, spec, 
+      origin, level, unit, 
+      price, stock, minsale, 
+      pick_addr, exhb_addr, create_time, 
+      status, check_status, status_time, 
+      sales_price, album, fresh, 
+      sale_type, valid_dates, brief, 
+      descp, last_update, updates
+      )
+    values (#{prodId,jdbcType=BIGINT}, #{uid,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, 
+      #{prodName,jdbcType=VARCHAR}, #{prodCode,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, 
+      #{cataId,jdbcType=INTEGER}, #{cataName,jdbcType=VARCHAR}, #{brandId,jdbcType=INTEGER}, 
+      #{brandName,jdbcType=VARCHAR}, #{model,jdbcType=VARCHAR}, #{spec,jdbcType=VARCHAR}, 
+      #{origin,jdbcType=VARCHAR}, #{level,jdbcType=VARCHAR}, #{unit,jdbcType=VARCHAR}, 
+      #{price,jdbcType=REAL}, #{stock,jdbcType=INTEGER}, #{minsale,jdbcType=INTEGER}, 
+      #{pickAddr,jdbcType=VARCHAR}, #{exhbAddr,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{checkStatus,jdbcType=TINYINT}, #{statusTime,jdbcType=TIMESTAMP}, 
+      #{salesPrice,jdbcType=REAL}, #{album,jdbcType=VARCHAR}, #{fresh,jdbcType=TINYINT}, 
+      #{saleType,jdbcType=TINYINT}, #{validDates,jdbcType=INTEGER}, #{brief,jdbcType=VARCHAR}, 
+      #{descp,jdbcType=VARCHAR}, #{lastUpdate,jdbcType=TIMESTAMP}, #{updates,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="addProductList" parameterType="java.util.List">
+    insert into product (prod_id, 
+      uid, nick_name, prod_name, 
+      prod_code, key_words, cata_id, 
+      cata_name, brand_id, brand_name, 
+      model, spec, origin, 
+      level, unit, price, 
+      stock, minsale, pick_addr, 
+      exhb_addr, create_time, status, 
+      check_status, status_time, sales_price, 
+      album, fresh, sale_type, 
+      valid_dates, brief, descp, 
+      last_update, updates)
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.prodId,jdbcType=BIGINT}, 
+      #{item.uid,jdbcType=INTEGER}, #{item.nickName,jdbcType=VARCHAR}, #{item.prodName,jdbcType=VARCHAR}, 
+      #{item.prodCode,jdbcType=VARCHAR}, #{item.keyWords,jdbcType=VARCHAR}, #{item.cataId,jdbcType=INTEGER}, 
+      #{item.cataName,jdbcType=VARCHAR}, #{item.brandId,jdbcType=INTEGER}, #{item.brandName,jdbcType=VARCHAR}, 
+      #{item.model,jdbcType=VARCHAR}, #{item.spec,jdbcType=VARCHAR}, #{item.origin,jdbcType=VARCHAR}, 
+      #{item.level,jdbcType=VARCHAR}, #{item.unit,jdbcType=VARCHAR}, #{item.price,jdbcType=REAL}, 
+      #{item.stock,jdbcType=INTEGER}, #{item.minsale,jdbcType=INTEGER}, #{item.pickAddr,jdbcType=VARCHAR}, 
+      #{item.exhbAddr,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.status,jdbcType=TINYINT}, 
+      #{item.checkStatus,jdbcType=TINYINT}, #{item.statusTime,jdbcType=TIMESTAMP}, #{item.salesPrice,jdbcType=REAL}, 
+      #{item.album,jdbcType=VARCHAR}, #{item.fresh,jdbcType=TINYINT}, #{item.saleType,jdbcType=TINYINT}, 
+      #{item.validDates,jdbcType=INTEGER}, #{item.brief,jdbcType=VARCHAR}, #{item.descp,jdbcType=VARCHAR}, 
+      #{item.lastUpdate,jdbcType=TIMESTAMP}, #{item.updates,jdbcType=VARCHAR})
+	</foreach>
+  </insert>
+  <update id="updateProductSelective" parameterType="com.cera.chain.entity.busi.Product">
+    update product
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodName != null">
+        prod_name = #{prodName,jdbcType=VARCHAR},
+      </if>
+      <if test="prodCode != null">
+        prod_code = #{prodCode,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWords != null">
+        key_words = #{keyWords,jdbcType=VARCHAR},
+      </if>
+      <if test="cataId != null">
+        cata_id = #{cataId,jdbcType=INTEGER},
+      </if>
+      <if test="cataName != null">
+        cata_name = #{cataName,jdbcType=VARCHAR},
+      </if>
+      <if test="brandId != null">
+        brand_id = #{brandId,jdbcType=INTEGER},
+      </if>
+      <if test="brandName != null">
+        brand_name = #{brandName,jdbcType=VARCHAR},
+      </if>
+      <if test="model != null">
+        model = #{model,jdbcType=VARCHAR},
+      </if>
+      <if test="spec != null">
+        spec = #{spec,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="level != null">
+        level = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null">
+        price = #{price,jdbcType=REAL},
+      </if>
+      <if test="stock != null">
+        stock = #{stock,jdbcType=INTEGER},
+      </if>
+      <if test="minsale != null">
+        minsale = #{minsale,jdbcType=INTEGER},
+      </if>
+      <if test="pickAddr != null">
+        pick_addr = #{pickAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="exhbAddr != null">
+        exhb_addr = #{exhbAddr,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="checkStatus != null">
+        check_status = #{checkStatus,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="salesPrice != null">
+        sales_price = #{salesPrice,jdbcType=REAL},
+      </if>
+      <if test="album != null">
+        album = #{album,jdbcType=VARCHAR},
+      </if>
+      <if test="fresh != null">
+        fresh = #{fresh,jdbcType=TINYINT},
+      </if>
+      <if test="saleType != null">
+        sale_type = #{saleType,jdbcType=TINYINT},
+      </if>
+      <if test="validDates != null">
+        valid_dates = #{validDates,jdbcType=INTEGER},
+      </if>
+      <if test="brief != null">
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="descp != null">
+        descp = #{descp,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdate != null">
+        last_update = #{lastUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updates != null">
+        updates = #{updates,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where prod_id = #{prodId,jdbcType=BIGINT}
+  </update>
+</mapper>

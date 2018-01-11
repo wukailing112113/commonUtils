@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.base.BaseAttrMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.base.BaseAttr">
+    <id column="attr_id" jdbcType="INTEGER" property="attrId" />
+    <result column="attr_name" jdbcType="VARCHAR" property="attrName" />
+    <result column="attr_keywords" jdbcType="VARCHAR" property="attrKeywords" />
+    <result column="group_type" jdbcType="TINYINT" property="groupType" />
+    <result column="attr_members" jdbcType="VARCHAR" property="attrMembers" />
+    <result column="attr_type" jdbcType="TINYINT" property="attrType" />
+    <result column="attr_display" jdbcType="TINYINT" property="attrDisplay" />
+    <result column="attr_weight" jdbcType="INTEGER" property="attrWeight" />
+    <result column="val_ids" jdbcType="VARCHAR" property="valIds" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="update_suid" jdbcType="BIGINT" property="updateSuid" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="attrId != null">
+       and attr_id = #{attrId,jdbcType=INTEGER}
+    </if>
+    <if test="attrName != null">
+       <![CDATA[and attr_name like CONCAT('%',#{attrName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="attrKeywords != null">
+       <![CDATA[and attr_keywords like CONCAT('%',#{attrKeywords,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="groupType != null">
+       and group_type = #{groupType,jdbcType=TINYINT}
+    </if>
+    <if test="attrMembers != null">
+       <![CDATA[and attr_members like CONCAT('%',#{attrMembers,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="attrType != null">
+       and attr_type = #{attrType,jdbcType=TINYINT}
+    </if>
+    <if test="attrDisplay != null">
+       and attr_display = #{attrDisplay,jdbcType=TINYINT}
+    </if>
+    <if test="attrWeight != null">
+       and attr_weight = #{attrWeight,jdbcType=INTEGER}
+    </if>
+    <if test="valIds != null">
+       <![CDATA[and val_ids like CONCAT('%',#{valIds,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="updateSuid != null">
+       and update_suid = #{updateSuid,jdbcType=BIGINT}
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    attr_id, attr_name, attr_keywords, group_type, attr_members, attr_type, attr_display, 
+    attr_weight, val_ids, create_time, status, status_time, update_suid
+  </sql>
+  <select id="selectMaxBaseAttrId" resultType="java.lang.Integer">
+    select IFNULL(max(attr_id), 0) from base_attr
+  </select>
+  <select id="getBaseAttrByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_attr
+    where attr_id = #{attrId,jdbcType=INTEGER}
+  </select>
+  <select id="selectBaseAttrs" parameterType="com.cera.chain.entity.base.BaseAttr" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from base_attr where 1=1 
+    <include refid="select_where_sql" />
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectBaseAttrByPage" parameterType="com.cera.chain.entity.base.BaseAttr" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from base_attr where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalBaseAttr" parameterType="com.cera.chain.entity.base.BaseAttr" resultType="java.lang.Long">
+    select count(*) as `count`
+     from base_attr where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteBaseAttrByKey" parameterType="java.lang.Integer">
+    delete from base_attr
+    where attr_id = #{attrId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteBaseAttrByList" parameterType="java.lang.Integer">
+    delete from base_attr
+    where attr_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.attrId}
+	 </foreach>
+  </delete>
+  <insert id="addBaseAttr" parameterType="com.cera.chain.entity.base.BaseAttr">
+    insert into base_attr (attr_id, attr_name, attr_keywords, 
+      group_type, attr_members, attr_type, 
+      attr_display, attr_weight, val_ids, 
+      create_time, status, status_time, 
+      update_suid)
+    values (#{attrId,jdbcType=INTEGER}, #{attrName,jdbcType=VARCHAR}, #{attrKeywords,jdbcType=VARCHAR}, 
+      #{groupType,jdbcType=TINYINT}, #{attrMembers,jdbcType=VARCHAR}, #{attrType,jdbcType=TINYINT}, 
+      #{attrDisplay,jdbcType=TINYINT}, #{attrWeight,jdbcType=INTEGER}, #{valIds,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{statusTime,jdbcType=TIMESTAMP}, 
+      #{updateSuid,jdbcType=BIGINT})
+  </insert>
+  <insert id="addBaseAttrList" parameterType="java.util.List">
+    insert into base_attr (attr_id, 
+      attr_name, attr_keywords, group_type, 
+      attr_members, attr_type, attr_display, 
+      attr_weight, val_ids, create_time, 
+      status, status_time, update_suid
+      )
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.attrId,jdbcType=INTEGER}, 
+      #{item.attrName,jdbcType=VARCHAR}, #{item.attrKeywords,jdbcType=VARCHAR}, #{item.groupType,jdbcType=TINYINT}, 
+      #{item.attrMembers,jdbcType=VARCHAR}, #{item.attrType,jdbcType=TINYINT}, #{item.attrDisplay,jdbcType=TINYINT}, 
+      #{item.attrWeight,jdbcType=INTEGER}, #{item.valIds,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.status,jdbcType=TINYINT}, #{item.statusTime,jdbcType=TIMESTAMP}, #{item.updateSuid,jdbcType=BIGINT}
+      )
+	</foreach>
+  </insert>
+  <update id="updateBaseAttrSelective" parameterType="com.cera.chain.entity.base.BaseAttr">
+    update base_attr
+    <set>
+      <if test="attrName != null">
+        attr_name = #{attrName,jdbcType=VARCHAR},
+      </if>
+      <if test="attrKeywords != null">
+        attr_keywords = #{attrKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="groupType != null">
+        group_type = #{groupType,jdbcType=TINYINT},
+      </if>
+      <if test="attrMembers != null">
+        attr_members = #{attrMembers,jdbcType=VARCHAR},
+      </if>
+      <if test="attrType != null">
+        attr_type = #{attrType,jdbcType=TINYINT},
+      </if>
+      <if test="attrDisplay != null">
+        attr_display = #{attrDisplay,jdbcType=TINYINT},
+      </if>
+      <if test="attrWeight != null">
+        attr_weight = #{attrWeight,jdbcType=INTEGER},
+      </if>
+      <if test="valIds != null">
+        val_ids = #{valIds,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateSuid != null">
+        update_suid = #{updateSuid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where attr_id = #{attrId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.base.BaseCataMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.base.BaseCata">
+    <id column="cata_id" jdbcType="INTEGER" property="cataId" />
+    <result column="cata_name" jdbcType="VARCHAR" property="cataName" />
+    <result column="cata_type" jdbcType="TINYINT" property="cataType" />
+    <result column="cata_parent_id" jdbcType="INTEGER" property="cataParentId" />
+    <result column="cata_keywords" jdbcType="VARCHAR" property="cataKeywords" />
+    <result column="cata_weight" jdbcType="INTEGER" property="cataWeight" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="update_suid" jdbcType="BIGINT" property="updateSuid" />
+    <result column="cata_index" jdbcType="INTEGER" property="cataIndex" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="cataId != null">
+       and cata_id = #{cataId,jdbcType=INTEGER}
+    </if>
+    <if test="cataName != null">
+       <![CDATA[and cata_name like CONCAT('%',#{cataName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="cataType != null">
+       and cata_type = #{cataType,jdbcType=TINYINT}
+    </if>
+    <if test="cataParentId != null">
+       and cata_parent_id = #{cataParentId,jdbcType=INTEGER}
+    </if>
+    <if test="cataKeywords != null">
+       <![CDATA[and cata_keywords like CONCAT('%',#{cataKeywords,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="cataWeight != null">
+       and cata_weight = #{cataWeight,jdbcType=INTEGER}
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="updateSuid != null">
+       and update_suid = #{updateSuid,jdbcType=BIGINT}
+    </if>
+    <if test="cataIndex != null">
+       and cata_index = #{cataIndex,jdbcType=INTEGER}
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    cata_id, cata_name, cata_type, cata_parent_id, cata_keywords, cata_weight, create_time, 
+    status, status_time, update_suid, cata_index
+  </sql>
+  <select id="selectMaxBaseCataId" resultType="java.lang.Integer">
+    select IFNULL(max(cata_id), 0) from base_cata
+  </select>
+  <select id="getBaseCataByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_cata
+    where cata_id = #{cataId,jdbcType=INTEGER}
+  </select>
+  <select id="selectBaseCatas" parameterType="com.cera.chain.entity.base.BaseCata" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from base_cata where 1=1 
+    <include refid="select_where_sql" />
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectBaseCataByPage" parameterType="com.cera.chain.entity.base.BaseCata" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from base_cata where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalBaseCata" parameterType="com.cera.chain.entity.base.BaseCata" resultType="java.lang.Long">
+    select count(*) as `count`
+     from base_cata where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteBaseCataByKey" parameterType="java.lang.Integer">
+    delete from base_cata
+    where cata_id = #{cataId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteBaseCataByList" parameterType="java.lang.Integer">
+    delete from base_cata
+    where cata_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.cataId}
+	 </foreach>
+  </delete>
+  <insert id="addBaseCata" parameterType="com.cera.chain.entity.base.BaseCata">
+    insert into base_cata (cata_id, cata_name, cata_type, 
+      cata_parent_id, cata_keywords, cata_weight, 
+      create_time, status, status_time, 
+      update_suid, cata_index)
+    values (#{cataId,jdbcType=INTEGER}, #{cataName,jdbcType=VARCHAR}, #{cataType,jdbcType=TINYINT}, 
+      #{cataParentId,jdbcType=INTEGER}, #{cataKeywords,jdbcType=VARCHAR}, #{cataWeight,jdbcType=INTEGER}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{statusTime,jdbcType=TIMESTAMP}, 
+      #{updateSuid,jdbcType=BIGINT}, #{cataIndex,jdbcType=INTEGER})
+  </insert>
+  <insert id="addBaseCataList" parameterType="java.util.List">
+    insert into base_cata (cata_id, 
+      cata_name, cata_type, cata_parent_id, 
+      cata_keywords, cata_weight, create_time, 
+      status, status_time, update_suid, 
+      cata_index)
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.cataId,jdbcType=INTEGER}, 
+      #{item.cataName,jdbcType=VARCHAR}, #{item.cataType,jdbcType=TINYINT}, #{item.cataParentId,jdbcType=INTEGER}, 
+      #{item.cataKeywords,jdbcType=VARCHAR}, #{item.cataWeight,jdbcType=INTEGER}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.status,jdbcType=TINYINT}, #{item.statusTime,jdbcType=TIMESTAMP}, #{item.updateSuid,jdbcType=BIGINT}, 
+      #{item.cataIndex,jdbcType=INTEGER})
+	</foreach>
+  </insert>
+  <update id="updateBaseCataSelective" parameterType="com.cera.chain.entity.base.BaseCata">
+    update base_cata
+    <set>
+      <if test="cataName != null">
+        cata_name = #{cataName,jdbcType=VARCHAR},
+      </if>
+      <if test="cataType != null">
+        cata_type = #{cataType,jdbcType=TINYINT},
+      </if>
+      <if test="cataParentId != null">
+        cata_parent_id = #{cataParentId,jdbcType=INTEGER},
+      </if>
+      <if test="cataKeywords != null">
+        cata_keywords = #{cataKeywords,jdbcType=VARCHAR},
+      </if>
+      <if test="cataWeight != null">
+        cata_weight = #{cataWeight,jdbcType=INTEGER},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateSuid != null">
+        update_suid = #{updateSuid,jdbcType=BIGINT},
+      </if>
+      <if test="cataIndex != null">
+        cata_index = #{cataIndex,jdbcType=INTEGER},
+      </if>
+    </set>
+    where cata_id = #{cataId,jdbcType=INTEGER}
+  </update>
+</mapper>

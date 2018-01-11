@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.prod.NewsMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.prod.News">
+    <id column="news_id" jdbcType="BIGINT" property="newsId" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+    <result column="clazz" jdbcType="SMALLINT" property="clazz" />
+    <result column="album" jdbcType="VARCHAR" property="album" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="is_first" jdbcType="TINYINT" property="isFirst" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="updates" jdbcType="VARCHAR" property="updates" />
+    <result column="pages" jdbcType="SMALLINT" property="pages" />
+    <result column="page1" jdbcType="VARCHAR" property="page1" />
+    <result column="page2" jdbcType="VARCHAR" property="page2" />
+    <result column="page3" jdbcType="VARCHAR" property="page3" />
+    <result column="page4" jdbcType="VARCHAR" property="page4" />
+    <result column="page5" jdbcType="VARCHAR" property="page5" />
+    <result column="page6" jdbcType="VARCHAR" property="page6" />
+    <result column="page7" jdbcType="VARCHAR" property="page7" />
+    <result column="page8" jdbcType="VARCHAR" property="page8" />
+    <result column="page9" jdbcType="VARCHAR" property="page9" />
+    <result column="page10" jdbcType="VARCHAR" property="page10" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="newsId != null">
+       and news_id = #{newsId,jdbcType=BIGINT}
+    </if>
+    <if test="title != null">
+       <![CDATA[and title like CONCAT('%',#{title,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="keyWords != null">
+       <![CDATA[and key_words like CONCAT('%',#{keyWords,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="clazz != null">
+       and clazz = #{clazz,jdbcType=SMALLINT}
+    </if>
+    <if test="album != null">
+       <![CDATA[and album like CONCAT('%',#{album,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="brief != null">
+       <![CDATA[and brief like CONCAT('%',#{brief,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="isFirst != null">
+       and is_first = #{isFirst,jdbcType=TINYINT}
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="updates != null">
+       <![CDATA[and updates like CONCAT('%',#{updates,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="pages != null">
+       and pages = #{pages,jdbcType=SMALLINT}
+    </if>
+    <if test="page1 != null">
+       <![CDATA[and page1 like CONCAT('%',#{page1,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page2 != null">
+       <![CDATA[and page2 like CONCAT('%',#{page2,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page3 != null">
+       <![CDATA[and page3 like CONCAT('%',#{page3,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page4 != null">
+       <![CDATA[and page4 like CONCAT('%',#{page4,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page5 != null">
+       <![CDATA[and page5 like CONCAT('%',#{page5,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page6 != null">
+       <![CDATA[and page6 like CONCAT('%',#{page6,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page7 != null">
+       <![CDATA[and page7 like CONCAT('%',#{page7,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page8 != null">
+       <![CDATA[and page8 like CONCAT('%',#{page8,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page9 != null">
+       <![CDATA[and page9 like CONCAT('%',#{page9,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="page10 != null">
+       <![CDATA[and page10 like CONCAT('%',#{page10,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    news_id, title, key_words, clazz, album, brief, is_first, create_time, status, status_time, 
+    updates, pages, page1, page2, page3, page4, page5, page6, page7, page8, page9, page10
+  </sql>
+  <select id="selectMaxNewsId" resultType="java.lang.Long">
+    select IFNULL(max(news_id), 0) from news
+  </select>
+  <select id="getNewsByKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from news
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </select>
+  <select id="selectNewss" parameterType="com.cera.chain.entity.prod.News" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from news where 1=1 
+    <include refid="select_where_sql" />
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectNewsByPage" parameterType="com.cera.chain.entity.prod.News" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from news where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalNews" parameterType="com.cera.chain.entity.prod.News" resultType="java.lang.Long">
+    select count(*) as `count`
+     from news where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteNewsByKey" parameterType="java.lang.Long">
+    delete from news
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteNewsByList" parameterType="java.lang.Long">
+    delete from news
+    where news_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.newsId}
+	 </foreach>
+  </delete>
+  <insert id="addNews" parameterType="com.cera.chain.entity.prod.News">
+    insert into news (news_id, title, key_words, 
+      clazz, album, brief, 
+      is_first, create_time, status, 
+      status_time, updates, pages, 
+      page1, page2, page3, 
+      page4, page5, page6, 
+      page7, page8, page9, 
+      page10)
+    values (#{newsId,jdbcType=BIGINT}, #{title,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, 
+      #{clazz,jdbcType=SMALLINT}, #{album,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, 
+      #{isFirst,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, 
+      #{statusTime,jdbcType=TIMESTAMP}, #{updates,jdbcType=VARCHAR}, #{pages,jdbcType=SMALLINT}, 
+      #{page1,jdbcType=VARCHAR}, #{page2,jdbcType=VARCHAR}, #{page3,jdbcType=VARCHAR}, 
+      #{page4,jdbcType=VARCHAR}, #{page5,jdbcType=VARCHAR}, #{page6,jdbcType=VARCHAR}, 
+      #{page7,jdbcType=VARCHAR}, #{page8,jdbcType=VARCHAR}, #{page9,jdbcType=VARCHAR}, 
+      #{page10,jdbcType=VARCHAR})
+  </insert>
+  <insert id="addNewsList" parameterType="java.util.List">
+    insert into news (news_id, 
+      title, key_words, clazz, 
+      album, brief, is_first, 
+      create_time, status, status_time, 
+      updates, pages, page1, 
+      page2, page3, page4, 
+      page5, page6, page7, 
+      page8, page9, page10
+      )
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.newsId,jdbcType=BIGINT}, 
+      #{item.title,jdbcType=VARCHAR}, #{item.keyWords,jdbcType=VARCHAR}, #{item.clazz,jdbcType=SMALLINT}, 
+      #{item.album,jdbcType=VARCHAR}, #{item.brief,jdbcType=VARCHAR}, #{item.isFirst,jdbcType=TINYINT}, 
+      #{item.createTime,jdbcType=TIMESTAMP}, #{item.status,jdbcType=TINYINT}, #{item.statusTime,jdbcType=TIMESTAMP}, 
+      #{item.updates,jdbcType=VARCHAR}, #{item.pages,jdbcType=SMALLINT}, #{item.page1,jdbcType=VARCHAR}, 
+      #{item.page2,jdbcType=VARCHAR}, #{item.page3,jdbcType=VARCHAR}, #{item.page4,jdbcType=VARCHAR}, 
+      #{item.page5,jdbcType=VARCHAR}, #{item.page6,jdbcType=VARCHAR}, #{item.page7,jdbcType=VARCHAR}, 
+      #{item.page8,jdbcType=VARCHAR}, #{item.page9,jdbcType=VARCHAR}, #{item.page10,jdbcType=VARCHAR}
+      )
+	</foreach>
+  </insert>
+  <update id="updateNewsSelective" parameterType="com.cera.chain.entity.prod.News">
+    update news
+    <set>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWords != null">
+        key_words = #{keyWords,jdbcType=VARCHAR},
+      </if>
+      <if test="clazz != null">
+        clazz = #{clazz,jdbcType=SMALLINT},
+      </if>
+      <if test="album != null">
+        album = #{album,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null">
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="isFirst != null">
+        is_first = #{isFirst,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updates != null">
+        updates = #{updates,jdbcType=VARCHAR},
+      </if>
+      <if test="pages != null">
+        pages = #{pages,jdbcType=SMALLINT},
+      </if>
+      <if test="page1 != null">
+        page1 = #{page1,jdbcType=VARCHAR},
+      </if>
+      <if test="page2 != null">
+        page2 = #{page2,jdbcType=VARCHAR},
+      </if>
+      <if test="page3 != null">
+        page3 = #{page3,jdbcType=VARCHAR},
+      </if>
+      <if test="page4 != null">
+        page4 = #{page4,jdbcType=VARCHAR},
+      </if>
+      <if test="page5 != null">
+        page5 = #{page5,jdbcType=VARCHAR},
+      </if>
+      <if test="page6 != null">
+        page6 = #{page6,jdbcType=VARCHAR},
+      </if>
+      <if test="page7 != null">
+        page7 = #{page7,jdbcType=VARCHAR},
+      </if>
+      <if test="page8 != null">
+        page8 = #{page8,jdbcType=VARCHAR},
+      </if>
+      <if test="page9 != null">
+        page9 = #{page9,jdbcType=VARCHAR},
+      </if>
+      <if test="page10 != null">
+        page10 = #{page10,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where news_id = #{newsId,jdbcType=BIGINT}
+  </update>
+</mapper>

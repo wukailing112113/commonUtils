@@ -1,0 +1,277 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+		PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+		"http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+
+	<classPathEntry location="C:/Users/IBA-DEV/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
+	<!--
+	<classPathEntry location="/users/chenzhengming/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
+	-->
+	<context id="MySqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
+
+		<!--<property name="mergeCallback" value="org.mybatis.generator.ext.api.MeldMergeShellCallback" />-->
+		<!--  <property name="projectPath" value="D:/svn_work/ibalife/generator" /> -->
+		<property name="mergeCallback" value="org.mybatis.generator.ext.api.ProjectPathShellCallBack" />
+
+		<!-- 可以配主工程生成的路径-->
+		<property name="projectPath" value="D:/project/base/ibaboss/iba-core" />
+
+		<!-- 可以配service, dao, redis生成的路径 -->
+		<property name="prjPathMap" value="{'service': 'D:/project/base/ibaboss/boss-service'}" />
+
+
+		<!--  生成的pojo，将implements Serializable -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.OrderByPlugin"></plugin>
+
+		<!-- 自定义的注释类 -->
+		<commentGenerator type="org.mybatis.generator.ext.AdvaCommentGenerator">
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+						connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_prod" userId="ibalife" password="ibalife">
+			<!--connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_base" userId="ibalife" password="ibalife">-->
+			<!--connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_prod" userId="ibalife" password="ibalife">-->
+			<!--connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_user" userId="ibalife" password="ibalife">-->
+			<!--connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_base" userId="ibalife" password="ibalife">-->
+			<!--connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_prod" userId="ibalife" password="ibalife">-->
+			<!--connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_busi" userId="ibalife" password="ibalife">-->
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<!--<javaModelGenerator targetPackage="com.iba.life.entity.report"-->
+		<!--<javaModelGenerator targetPackage="com.iba.life.entity.base"-->
+		<!--<javaModelGenerator targetPackage="com.iba.life.entity.user"-->
+		<!--<javaModelGenerator targetPackage="com.iba.life.entity.prod"-->
+		<!--<javaModelGenerator targetPackage="com.iba.life.entity.base"-->
+		<javaModelGenerator targetPackage="com.iba.life.entity.prod"
+							targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+			<property name="pageEntity" value="true" />
+			<property name="rootClass" value="com.iba.life.entity.PageEntity" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="mapper/prod"
+						 targetProject="src/main/resources"  >
+			<property name="enableSubPackages" value="true" />
+			<!-- 设置为false时候, callback设置为 直接覆盖原有的xmlMapper文件 -->
+			<property name="xmlMergable" value="false" />
+		</sqlMapGenerator>
+
+
+		<javaClientGenerator type="org.mybatis.generator.ext.daomapper.DaoMapperGenerator" targetPackage="com.iba.life.dao.prod"
+							 targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<!-- 是否产生redis工具类  -->
+			<property name="genRedis" value="true" />
+			<!--&lt;!&ndash; 是否产生service 类  &ndash;&gt;-->
+			<property name="genService" value="true" />
+			<!--&lt;!&ndash;&lt;!&ndash;  service工具类的package名称  &ndash;&gt;&ndash;&gt;-->
+			<property name="servicePackage" value="com.iba.boss" />
+
+		</javaClientGenerator>
+		<!--	<table tableName="user_consign" domainObjectName="UserConsign"
+                   enableCountByExample="false" enableSelectByExample="false"
+                   enableUpdateByExample="false" enableDeleteByExample="false">
+            </table>
+
+        <table tableName="base_channel_origin" domainObjectName="BaseChannelOrigin"
+               enableCountByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false">
+        </table>
+-->
+		<!--<table tableName="base_origin" domainObjectName="BaseOrigin"-->
+		<!--enableCountByExample="false" enableSelectByExample="false"-->
+		<!--enableUpdateByExample="false" enableDeleteByExample="false">-->
+		<!--</table>-->
+		<!--
+        <table tableName="boss_prod_sku" domainObjectName="BossProdSku"
+               enableCountByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false">
+            <property name="selectInColumList" value="['prod_id', 'boss_prod_id']" />
+            <property name="maxIdRelateColum" value="sku_id" />
+            <property name="maxIdPrefix" value="1" />
+            <property name="maxIdPostfix" value="100" />
+        </table>
+            <table tableName="boss_prod" domainObjectName="BossProd"
+                   enableCountByExample="false" enableSelectByExample="false"
+                   enableUpdateByExample="false" enableDeleteByExample="false">
+                <property name="selectInColumList" value="['prod_id', 'boss_prod_id', 'cata_id', 'brand_id', 'create_suid']" />
+                <property name="maxIdRelateColum" value="prod_id" />
+                <property name="maxIdPrefix" value="1" />
+                <property name="maxIdPostfix" value="100" />
+            </table>
+
+
+            <table tableName="prod_explain" domainObjectName="ProdExplain"
+                   enableCountByExample="false" enableSelectByExample="false"
+                   enableUpdateByExample="false" enableDeleteByExample="false">
+            </table>
+                <table tableName="report_ushop" domainObjectName="ReportUshop"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+                </table>
+                <table tableName="report_ushop_order" domainObjectName="ReportUshopOrder"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+                </table>
+
+                <table tableName="report_boss_prod" domainObjectName="ReportBossProd"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+                </table>
+                <table tableName="report_boss_sku" domainObjectName="ReportBossSku"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+                </table>
+                <table tableName="report_subs" domainObjectName="ReportSubs"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+                </table>
+                <table tableName="report_subs" domainObjectName="ReportSubs"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+                </table>
+        -->
+		<!--
+		<table tableName="subs_package" domainObjectName="SubsPackage"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['subs_id']" />
+		</table>
+
+		<table tableName="subs_package" domainObjectName="SubsPackage"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['subs_id']" />
+		</table>
+		-->
+		<!--
+
+		<table tableName="boss_prod_busi" domainObjectName="BossProdBusi"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['prod_id', 'boss_prod_id']" />
+			<property name="operColumnList" value="{'list':['dcell', 'mcell'], 'map': {'dcell':[{'field':'dcellMin', 'oper':'&gt;='}, {'field':'dcellMax', 'oper':'&lt;='}], 'mcell':[{'field':'mcellMin', 'oper':'&gt;='}, {'field':'mcellMax', 'oper':'&lt;='}]}}" ></property>
+		</table>
+
+		<table tableName="prod" domainObjectName="Prod"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['cata_id', 'brand_id', 'create_suid']" />
+			<property name="maxIdRelateColum" value="cata_id" />
+			<property name="maxIdPostfix" value="1000" />
+		</table>
+		<table tableName="prod_sku" domainObjectName="ProdSku"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="maxIdRelateColum" value="prod_id" />
+			<property name="maxIdPostfix" value="100" />
+		</table>
+		<table tableName="boss_prod" domainObjectName="BossProd"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['prod_id', 'boss_prod_id', 'cata_id', 'brand_id', 'create_suid']" />
+			<property name="maxIdRelateColum" value="prod_id" />
+			<property name="maxIdPrefix" value="1" />
+			<property name="maxIdPostfix" value="100" />
+		</table>
+
+		<table tableName="boss_prod_sku" domainObjectName="BossProdSku"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['prod_id', 'boss_prod_id']" />
+			<property name="maxIdRelateColum" value="sku_id" />
+			<property name="maxIdPrefix" value="1" />
+			<property name="maxIdPostfix" value="100" />
+		</table>
+
+		<table tableName="boss_prod_busi" domainObjectName="BossProdBusi"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['prod_id', 'boss_prod_id']" />
+			<property name="selectNotInColumList" value="[  'boss_prod_id']" />
+			<property name="operColumnList" value="{'list':['dcell', 'mcell'], 'map': {'dcell':[{'field':'dcellMin', 'oper':'&gt;='}, {'field':'dcellMax', 'oper':'&lt;='}], 'mcell':[{'field':'mcellMin', 'oper':'&gt;='}, {'field':'mcellMax', 'oper':'&lt;='}]}}" ></property>
+		</table>
+		<table tableName="boss_prod_sku_ext" domainObjectName="BossProdSkuExt"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['prod_id', 'boss_prod_id']" />
+			<property name="operColumnList" value="{'list':['store'], 'map': {'store':[{'field':'storeMin', 'oper':'&gt;'}]}}" />
+			<property name="selectNotInColumList" value="['boss_sku_id', 'boss_prod_id']" />
+		</table>
+
+		<table tableName="prod_rec" domainObjectName="ProdRec"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+		<table tableName="prod_rec_dtl" domainObjectName="ProdRecDtl"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+
+        <table tableName="bbc_prod" domainObjectName="BbcProd"
+              enableCountByExample="false" enableSelectByExample="false"
+              enableUpdateByExample="false" enableDeleteByExample="false">
+       </table>
+       <table tableName="bbc_prod_sku" domainObjectName="BbcProdSku"
+              enableCountByExample="false" enableSelectByExample="false"
+              enableUpdateByExample="false" enableDeleteByExample="false">
+       </table>
+       <table tableName="bbc_prod_sku_ext" domainObjectName="BbcProdSkuExt"
+              enableCountByExample="false" enableSelectByExample="false"
+              enableUpdateByExample="false" enableDeleteByExample="false">
+       </table>-->
+		<!--
+            <table tableName="base_currency" domainObjectName="BaseCurrency"
+                       enableCountByExample="false" enableSelectByExample="false"
+                       enableUpdateByExample="false" enableDeleteByExample="false">
+            </table>
+
+			<table tableName="base_brand" domainObjectName="BaseBrand"
+				   enableCountByExample="false" enableSelectByExample="false"
+				   enableUpdateByExample="false" enableDeleteByExample="false">
+			</table>
+		-->
+
+		<!--&lt;!&ndash;
+
+		<table tableName="base_hot_search" domainObjectName="BaseHotSearch"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+		<table tableName="base_brand_group" domainObjectName="BaseBrandGroup"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+
+-->
+        <!--<table tableName="prod_recommend" domainObjectName="ProdRecommend"
+               enableCountByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false">
+        </table>
+        &lt;!&ndash;&ndash;&gt;
+		<table tableName="home_page_prod" domainObjectName="HomePageProd"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+
+		<table tableName="hot_new_config_prod" domainObjectName="HotNewConfigProd"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>-->
+		<table tableName="physical_shop_prod" domainObjectName="PhysicalShopProd"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+	</context>
+
+</generatorConfiguration>

@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.busi.DemandMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.busi.Demand">
+    <id column="demand_id" jdbcType="BIGINT" property="demandId" />
+    <result column="uid" jdbcType="INTEGER" property="uid" />
+    <result column="nick_name" jdbcType="VARCHAR" property="nickName" />
+    <result column="title" jdbcType="VARCHAR" property="title" />
+    <result column="key_words" jdbcType="VARCHAR" property="keyWords" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="album" jdbcType="VARCHAR" property="album" />
+    <result column="unit" jdbcType="VARCHAR" property="unit" />
+    <result column="total" jdbcType="INTEGER" property="total" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="attrs" jdbcType="VARCHAR" property="attrs" />
+    <result column="origin" jdbcType="VARCHAR" property="origin" />
+    <result column="last_update" jdbcType="TIMESTAMP" property="lastUpdate" />
+    <result column="updates" jdbcType="VARCHAR" property="updates" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="demandId != null">
+       and demand_id = #{demandId,jdbcType=BIGINT}
+    </if>
+    <if test="uid != null">
+       and uid = #{uid,jdbcType=INTEGER}
+    </if>
+    <if test="nickName != null">
+       <![CDATA[and nick_name like CONCAT('%',#{nickName,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="title != null">
+       <![CDATA[and title like CONCAT('%',#{title,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="keyWords != null">
+       <![CDATA[and key_words like CONCAT('%',#{keyWords,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="album != null">
+       <![CDATA[and album like CONCAT('%',#{album,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="unit != null">
+       <![CDATA[and unit like CONCAT('%',#{unit,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="total != null">
+       and total = #{total,jdbcType=INTEGER}
+    </if>
+    <if test="brief != null">
+       <![CDATA[and brief like CONCAT('%',#{brief,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="attrs != null">
+       <![CDATA[and attrs like CONCAT('%',#{attrs,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="origin != null">
+       <![CDATA[and origin like CONCAT('%',#{origin,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="lastUpdateStart != null and lastUpdateEnd != null">
+       and last_update &gt;= #{lastUpdateStart,jdbcType=TIMESTAMP} and #{lastUpdateEnd,jdbcType=TIMESTAMP} &gt;= last_update
+    </if>
+    <if test="updates != null">
+       <![CDATA[and updates like CONCAT('%',#{updates,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    demand_id, uid, nick_name, title, key_words, create_time, status, status_time, album, 
+    unit, total, brief, attrs, origin, last_update, updates
+  </sql>
+  <select id="selectMaxDemandId" resultType="java.lang.Long">
+    select IFNULL(max(demand_id), 0) from demand
+  </select>
+  <select id="getDemandByKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from demand
+    where demand_id = #{demandId,jdbcType=BIGINT}
+  </select>
+  <select id="selectDemands" parameterType="com.cera.chain.entity.busi.Demand" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from demand where 1=1 
+    <include refid="select_where_sql" />
+    <if test="orderBy != null and orderBy != '' ">
+      #{orderBy} 
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectDemandByPage" parameterType="com.cera.chain.entity.busi.Demand" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from demand where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="orderBy != null and orderBy != '' ">
+      #{orderBy} 
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalDemand" parameterType="com.cera.chain.entity.busi.Demand" resultType="java.lang.Long">
+    select count(*) as `count`
+     from demand where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteDemandByKey" parameterType="java.lang.Long">
+    delete from demand
+    where demand_id = #{demandId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteDemandByList" parameterType="java.lang.Long">
+    delete from demand
+    where demand_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.demandId}
+	 </foreach>
+  </delete>
+  <insert id="addDemand" parameterType="com.cera.chain.entity.busi.Demand">
+    insert into demand (demand_id, uid, nick_name, 
+      title, key_words, create_time, 
+      status, status_time, album, 
+      unit, total, brief, 
+      attrs, origin, last_update, 
+      updates)
+    values (#{demandId,jdbcType=BIGINT}, #{uid,jdbcType=INTEGER}, #{nickName,jdbcType=VARCHAR}, 
+      #{title,jdbcType=VARCHAR}, #{keyWords,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{statusTime,jdbcType=TIMESTAMP}, #{album,jdbcType=VARCHAR}, 
+      #{unit,jdbcType=VARCHAR}, #{total,jdbcType=INTEGER}, #{brief,jdbcType=VARCHAR}, 
+      #{attrs,jdbcType=VARCHAR}, #{origin,jdbcType=VARCHAR}, #{lastUpdate,jdbcType=TIMESTAMP}, 
+      #{updates,jdbcType=VARCHAR})
+  </insert>
+  <insert id="addDemandList" parameterType="java.util.List">
+    insert into demand (demand_id, 
+      uid, nick_name, title, 
+      key_words, create_time, status, 
+      status_time, album, unit, 
+      total, brief, attrs, 
+      origin, last_update, updates
+      )
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.demandId,jdbcType=BIGINT}, 
+      #{item.uid,jdbcType=INTEGER}, #{item.nickName,jdbcType=VARCHAR}, #{item.title,jdbcType=VARCHAR}, 
+      #{item.keyWords,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.status,jdbcType=TINYINT}, 
+      #{item.statusTime,jdbcType=TIMESTAMP}, #{item.album,jdbcType=VARCHAR}, #{item.unit,jdbcType=VARCHAR}, 
+      #{item.total,jdbcType=INTEGER}, #{item.brief,jdbcType=VARCHAR}, #{item.attrs,jdbcType=VARCHAR}, 
+      #{item.origin,jdbcType=VARCHAR}, #{item.lastUpdate,jdbcType=TIMESTAMP}, #{item.updates,jdbcType=VARCHAR}
+      )
+	</foreach>
+  </insert>
+  <update id="updateDemandSelective" parameterType="com.cera.chain.entity.busi.Demand">
+    update demand
+    <set>
+      <if test="uid != null">
+        uid = #{uid,jdbcType=INTEGER},
+      </if>
+      <if test="nickName != null">
+        nick_name = #{nickName,jdbcType=VARCHAR},
+      </if>
+      <if test="title != null">
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="keyWords != null">
+        key_words = #{keyWords,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="album != null">
+        album = #{album,jdbcType=VARCHAR},
+      </if>
+      <if test="unit != null">
+        unit = #{unit,jdbcType=VARCHAR},
+      </if>
+      <if test="total != null">
+        total = #{total,jdbcType=INTEGER},
+      </if>
+      <if test="brief != null">
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="attrs != null">
+        attrs = #{attrs,jdbcType=VARCHAR},
+      </if>
+      <if test="origin != null">
+        origin = #{origin,jdbcType=VARCHAR},
+      </if>
+      <if test="lastUpdate != null">
+        last_update = #{lastUpdate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updates != null">
+        updates = #{updates,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where demand_id = #{demandId,jdbcType=BIGINT}
+  </update>
+</mapper>

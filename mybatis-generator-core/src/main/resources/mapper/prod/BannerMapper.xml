@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.prod.BannerMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.prod.Banner">
+    <id column="banner_id" jdbcType="BIGINT" property="bannerId" />
+    <result column="type" jdbcType="SMALLINT" property="type" />
+    <result column="url" jdbcType="VARCHAR" property="url" />
+    <result column="icon" jdbcType="VARCHAR" property="icon" />
+    <result column="brief" jdbcType="VARCHAR" property="brief" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="updates" jdbcType="VARCHAR" property="updates" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="bannerId != null">
+       and banner_id = #{bannerId,jdbcType=BIGINT}
+    </if>
+    <if test="type != null">
+       and type = #{type,jdbcType=SMALLINT}
+    </if>
+    <if test="url != null">
+       <![CDATA[and url like CONCAT('%',#{url,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="icon != null">
+       <![CDATA[and icon like CONCAT('%',#{icon,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="brief != null">
+       <![CDATA[and brief like CONCAT('%',#{brief,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="picture != null">
+       <![CDATA[and picture like CONCAT('%',#{picture,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="updates != null">
+       <![CDATA[and updates like CONCAT('%',#{updates,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    banner_id, type, url, icon, brief, picture, create_time, status, status_time, updates
+  </sql>
+  <select id="selectMaxBannerId" resultType="java.lang.Long">
+    select IFNULL(max(banner_id), 0) from banner
+  </select>
+  <select id="getBannerByKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from banner
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </select>
+  <select id="selectBanners" parameterType="com.cera.chain.entity.prod.Banner" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from banner where 1=1 
+    <include refid="select_where_sql" />
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectBannerByPage" parameterType="com.cera.chain.entity.prod.Banner" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from banner where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalBanner" parameterType="com.cera.chain.entity.prod.Banner" resultType="java.lang.Long">
+    select count(*) as `count`
+     from banner where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteBannerByKey" parameterType="java.lang.Long">
+    delete from banner
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteBannerByList" parameterType="java.lang.Long">
+    delete from banner
+    where banner_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.bannerId}
+	 </foreach>
+  </delete>
+  <insert id="addBanner" parameterType="com.cera.chain.entity.prod.Banner">
+    insert into banner (banner_id, type, url, 
+      icon, brief, picture, 
+      create_time, status, status_time, 
+      updates)
+    values (#{bannerId,jdbcType=BIGINT}, #{type,jdbcType=SMALLINT}, #{url,jdbcType=VARCHAR}, 
+      #{icon,jdbcType=VARCHAR}, #{brief,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{status,jdbcType=TINYINT}, #{statusTime,jdbcType=TIMESTAMP}, 
+      #{updates,jdbcType=VARCHAR})
+  </insert>
+  <insert id="addBannerList" parameterType="java.util.List">
+    insert into banner (banner_id, 
+      type, url, icon, 
+      brief, picture, create_time, 
+      status, status_time, updates
+      )
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.bannerId,jdbcType=BIGINT}, 
+      #{item.type,jdbcType=SMALLINT}, #{item.url,jdbcType=VARCHAR}, #{item.icon,jdbcType=VARCHAR}, 
+      #{item.brief,jdbcType=VARCHAR}, #{item.picture,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, 
+      #{item.status,jdbcType=TINYINT}, #{item.statusTime,jdbcType=TIMESTAMP}, #{item.updates,jdbcType=VARCHAR}
+      )
+	</foreach>
+  </insert>
+  <update id="updateBannerSelective" parameterType="com.cera.chain.entity.prod.Banner">
+    update banner
+    <set>
+      <if test="type != null">
+        type = #{type,jdbcType=SMALLINT},
+      </if>
+      <if test="url != null">
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="icon != null">
+        icon = #{icon,jdbcType=VARCHAR},
+      </if>
+      <if test="brief != null">
+        brief = #{brief,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updates != null">
+        updates = #{updates,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where banner_id = #{bannerId,jdbcType=BIGINT}
+  </update>
+</mapper>

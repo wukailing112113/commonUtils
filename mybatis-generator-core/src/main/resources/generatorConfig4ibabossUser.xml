@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <!DOCTYPE generatorConfiguration 
+      PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+      "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+	
+	<classPathEntry location="C:/Users/IBA-DEV/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
+	<!--
+	<classPathEntry location="/users/chenzhengming/.m2/repository/mysql/mysql-connector-java/5.1.38/mysql-connector-java-5.1.38.jar" />
+	-->
+	<context id="MySqlTables" targetRuntime="MyBatis3" defaultModelType="flat">
+		<!--
+		<property name="mergeCallback" value="org.mybatis.generator.ext.api.MeldMergeShellCallback" />
+		<property name="projectPath" value="D:/svn_work/ibalife/generator" /> 
+		-->
+		<property name="mergeCallback" value="org.mybatis.generator.ext.api.ProjectPathShellCallBack" />
+		
+		<!-- 可以配主工程生成的路径-->
+		<property name="projectPath" value="D:/project/base/ibaboss/iba-core" />
+		 
+		<!-- 可以配service, dao, redis生成的路径 -->
+		<property name="prjPathMap" value="{'service': 'D:/project/base/ibaboss/boss-service'}" />
+		
+		
+		<!--  生成的pojo，将implements Serializable -->
+		<plugin type="org.mybatis.generator.plugins.SerializablePlugin"></plugin>
+		<plugin type="org.mybatis.generator.plugins.OrderByPlugin"></plugin>
+
+		<!-- 自定义的注释类 -->
+		<commentGenerator type="org.mybatis.generator.ext.AdvaCommentGenerator">
+			<property name="suppressAllComments" value="true" />
+			<property name="suppressDate" value="true" />
+		</commentGenerator>
+
+		<jdbcConnection driverClass="com.mysql.jdbc.Driver"
+			 connectionURL="jdbc:mysql://127.0.0.1:3306/ibalife_user" userId="ibalife" password="ibalife">
+		</jdbcConnection>
+
+		<javaTypeResolver>
+			<property name="forceBigDecimals" value="false" />
+		</javaTypeResolver>
+
+		<javaModelGenerator targetPackage="com.iba.life.entity.user"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<property name="trimStrings" value="true" />
+			<property name="pageEntity" value="true" />
+			<property name="rootClass" value="com.iba.life.entity.PageEntity" />
+		</javaModelGenerator>
+
+		<sqlMapGenerator targetPackage="mapper/user"
+			targetProject="src/main/resources"  >
+			<property name="enableSubPackages" value="true" />
+			<!-- 设置为false时候, callback设置为 直接覆盖原有的xmlMapper文件 -->
+			<property name="xmlMergable" value="false" />
+		</sqlMapGenerator>
+
+		<javaClientGenerator type="org.mybatis.generator.ext.daomapper.DaoMapperGenerator" targetPackage="com.iba.life.dao.user"
+			targetProject="src/main/java">
+			<property name="enableSubPackages" value="true" />
+			<!-- 是否产生redis工具类  -->
+			<property name="genRedis" value="true" />
+			<!-- 是否产生service 类  -->
+			<property name="genService" value="true" />
+			<!--  service工具类的package名称  -->
+			<property name="servicePackage" value="com.iba.boss" />
+			
+		</javaClientGenerator>
+<!--
+		<table tableName="prod" domainObjectName="Prod"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			<property name="selectInColumList" value="['cata_id', 'brand_id', 'create_suid']" />
+			<property name="maxIdRelateColum" value="cata_id" />
+			<property name="parentId" value="cata_id" />
+			<property name="maxIdPrefix" value="0" />
+			<property name="maxIdPostfix" value="1000" />
+		</table>
+-->
+
+        <!--<table tableName="user_bmc_team_statistics" domainObjectName="UserBmcTeamStatistics"
+               enableCountByExample="false" enableSelectByExample="false"
+               enableUpdateByExample="false" enableDeleteByExample="false">
+        </table>
+        &lt;!&ndash;&ndash;&gt;
+		<table tableName="user_ext4c_bmc" domainObjectName="UserExt4cBmc"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			   <property name="parentId" value="parent_uid" />
+		</table>
+		<table tableName="user_ext4c_grade" domainObjectName="UserExt4cGrade"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+		<table tableName="user_ext4c_upgrade_apply" domainObjectName="UserExt4cUpgradeApply"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+		<table tableName="user_pay_account" domainObjectName="UserPayAccount"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+			   <property name="selectInColumList" value="['uid','status']" />
+		</table>-->
+		<table tableName="physical_shop" domainObjectName="PhysicalShop"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+		<table tableName="physical_shop_admin" domainObjectName="PhysicalShopAdmin"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+		<table tableName="user_ext_physical_shop" domainObjectName="UserExtPhysicalShop"
+			   enableCountByExample="false" enableSelectByExample="false"
+			   enableUpdateByExample="false" enableDeleteByExample="false">
+		</table>
+	</context>
+
+</generatorConfiguration>

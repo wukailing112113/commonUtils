@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cera.chain.dao.base.BaseAttrValueMapper">
+  <resultMap id="BaseResultMap" type="com.cera.chain.entity.base.BaseAttrValue">
+    <id column="val_id" jdbcType="INTEGER" property="valId" />
+    <result column="attr_val" jdbcType="VARCHAR" property="attrVal" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="status" jdbcType="TINYINT" property="status" />
+    <result column="status_time" jdbcType="TIMESTAMP" property="statusTime" />
+    <result column="update_suid" jdbcType="BIGINT" property="updateSuid" />
+  </resultMap>
+  <sql id="select_where_sql">
+    <if test="valId != null">
+       and val_id = #{valId,jdbcType=INTEGER}
+    </if>
+    <if test="attrVal != null">
+       <![CDATA[and attr_val like CONCAT('%',#{attrVal,jdbcType=VARCHAR} ,'%')]]>
+    </if>
+    <if test="createTimeStart != null and createTimeEnd != null">
+       and create_time &gt;= #{createTimeStart,jdbcType=TIMESTAMP} and #{createTimeEnd,jdbcType=TIMESTAMP} &gt;= create_time
+    </if>
+    <if test="status != null">
+       and status = #{status,jdbcType=TINYINT}
+    </if>
+    <if test="statusTimeStart != null and statusTimeEnd != null">
+       and status_time &gt;= #{statusTimeStart,jdbcType=TIMESTAMP} and #{statusTimeEnd,jdbcType=TIMESTAMP} &gt;= status_time
+    </if>
+    <if test="updateSuid != null">
+       and update_suid = #{updateSuid,jdbcType=BIGINT}
+    </if>
+  </sql>
+  <sql id="Base_Column_List">
+    val_id, attr_val, create_time, status, status_time, update_suid
+  </sql>
+  <select id="selectMaxBaseAttrValueId" resultType="java.lang.Integer">
+    select IFNULL(max(val_id), 0) from base_attr_value
+  </select>
+  <select id="getBaseAttrValueByKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from base_attr_value
+    where val_id = #{valId,jdbcType=INTEGER}
+  </select>
+  <select id="selectBaseAttrValues" parameterType="com.cera.chain.entity.base.BaseAttrValue" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from base_attr_value where 1=1 
+    <include refid="select_where_sql" />
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="selectBaseAttrValueByPage" parameterType="com.cera.chain.entity.base.BaseAttrValue" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+     from base_attr_value where 1=1 
+    <include refid="select_where_sql" />
+    <if test="index != null and pageSize != null">
+      limit #{index,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </if>
+    <if test="forupdate != null and forupdate">
+      for update
+    </if>
+  </select>
+  <select id="getTotalBaseAttrValue" parameterType="com.cera.chain.entity.base.BaseAttrValue" resultType="java.lang.Long">
+    select count(*) as `count`
+     from base_attr_value where 1=1 
+    <include refid="select_where_sql" />
+  </select>
+  <delete id="deleteBaseAttrValueByKey" parameterType="java.lang.Integer">
+    delete from base_attr_value
+    where val_id = #{valId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteBaseAttrValueByList" parameterType="java.lang.Integer">
+    delete from base_attr_value
+    where val_id in 
+	 <foreach collection="list" item = "item" open="(" separator="," close=")">
+	  #{item.valId}
+	 </foreach>
+  </delete>
+  <insert id="addBaseAttrValue" parameterType="com.cera.chain.entity.base.BaseAttrValue">
+    insert into base_attr_value (val_id, attr_val, create_time, 
+      status, status_time, update_suid
+      )
+    values (#{valId,jdbcType=INTEGER}, #{attrVal,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{status,jdbcType=TINYINT}, #{statusTime,jdbcType=TIMESTAMP}, #{updateSuid,jdbcType=BIGINT}
+      )
+  </insert>
+  <insert id="addBaseAttrValueList" parameterType="java.util.List">
+    insert into base_attr_value (val_id, 
+      attr_val, create_time, status, 
+      status_time, update_suid)
+    values
+	<foreach collection="list" index="index" item="item" separator=","> 
+	  (#{item.valId,jdbcType=INTEGER}, 
+      #{item.attrVal,jdbcType=VARCHAR}, #{item.createTime,jdbcType=TIMESTAMP}, #{item.status,jdbcType=TINYINT}, 
+      #{item.statusTime,jdbcType=TIMESTAMP}, #{item.updateSuid,jdbcType=BIGINT})
+	</foreach>
+  </insert>
+  <update id="updateBaseAttrValueSelective" parameterType="com.cera.chain.entity.base.BaseAttrValue">
+    update base_attr_value
+    <set>
+      <if test="attrVal != null">
+        attr_val = #{attrVal,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="status != null">
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="statusTime != null">
+        status_time = #{statusTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateSuid != null">
+        update_suid = #{updateSuid,jdbcType=BIGINT},
+      </if>
+    </set>
+    where val_id = #{valId,jdbcType=INTEGER}
+  </update>
+</mapper>
